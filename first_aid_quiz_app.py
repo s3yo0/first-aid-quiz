@@ -15,13 +15,13 @@ import time
 # 🎬 GIF 모음
 정답_GIF_목록 = [
     "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
-    "https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif",
-    "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif"
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmFqOW5tbzVhZHlsMGUwcGQzdWxwN21iZm82MG1mcGhqY3U4OGlnYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/s2qXK8wAvkHTO/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmFqOW5tbzVhZHlsMGUwcGQzdWxwN21iZm82MG1mcGhqY3U4OGlnYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IwAZ6dvvvaTtdI8SD5/giphy.gif"
 ]
 오답_GIF_목록 = [
-    "https://media.giphy.com/media/3og0IPxMM0erATueVW/giphy.gif",
-    "https://media.giphy.com/media/l1J3preURPiwjRPvG/giphy.gif",
-    "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif"
+    "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGdoNHJ4bGRmYzQ5bDdiOWVybDlocjkyY203bzg0M3dqNGllZmIydCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/d2lcHJTG5Tscg/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3eWdqaWppNmxxNDFqenIwaDUxYmt6eXA0YjA4dW5yMGlxZ3F3MXJxaiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/erwW0QPCDN5QOe0BA1/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2JxYW9lNXRkeTd1ZzR2dHB4a3V4NmwyMDNuOWJ1ZGZhYXdtZXV1OCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/10tIjpzIu8fe0/giphy.gif"
 ]
 
 # 📋 퀴즈 데이터
