@@ -4,17 +4,27 @@ import time
 
 # 🎉 정답 및 오답 메시지
 정답_메시지 = [
-    "목숨을 구했어요! 💖", "훌륭한 판단이었습니다! 👏", "응급처치 성공! 👍", "완벽한 응급 대응이었어요! 🏅", "사람을 살렸습니다! 👨‍⚕️"
+    "목숨을 구했어요! 💖", "훌륭한 판단이었습니다! 👏", "응급처치 성공! 👍",
+    "완벽한 응급 대응이었어요! 🏅", "사람을 살렸습니다! 👨‍⚕️"
 ]
 오답_메시지 = [
-    "죽었습니다..... ☠️", "실패했습니다..... 💀", "구조에 실패했습니다... 🩸", "응급처치 실패! 😵", "Game Over... 🕹️"
+    "죽었습니다..... ☠️", "실패했습니다..... 💀", "구조에 실패했습니다... 🩸",
+    "응급처치 실패! 😵", "게임 오버... 🕹️"
 ]
 
-# 🎬 GIF 링크
-정답_GIF = "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
-오답_GIF = "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGdoNHJ4bGRmYzQ5bDdiOWVybDlocjkyY203bzg0M3dqNGllZmIydCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/d2lcHJTG5Tscg/giphy.gif"
+# 🎬 GIF 모음
+정답_GIF_목록 = [
+    "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
+    "https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif",
+    "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif"
+]
+오답_GIF_목록 = [
+    "https://media.giphy.com/media/3og0IPxMM0erATueVW/giphy.gif",
+    "https://media.giphy.com/media/l1J3preURPiwjRPvG/giphy.gif",
+    "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif"
+]
 
-# 📋 퀴즈 데이터 (카테고리 포함)
+# 📋 퀴즈 데이터
 quiz_data = [
     {
         "카테고리": "응급 상황",
@@ -200,36 +210,68 @@ quiz_data = [
     }
 ]
 
-# 문제 순서 랜덤 섞기
-if "섞은퀴즈" not in st.session_state:
-    st.session_state.섞은퀴즈 = random.sample(quiz_data, len(quiz_data))
+# 🧠 세션 초기화
+if "문제순서" not in st.session_state:
+    st.session_state.문제순서 = random.sample(range(len(quiz_data)), len(quiz_data))
+if "문제번호" not in st.session_state:
     st.session_state.문제번호 = 0
+if "점수" not in st.session_state:
     st.session_state.점수 = 0
+if "정답상태" not in st.session_state:
     st.session_state.정답상태 = None
+if "오답노트" not in st.session_state:
     st.session_state.오답노트 = []
+if "시작시간" not in st.session_state:
     st.session_state.시작시간 = time.time()
 
-퀴즈 = st.session_state.섞은퀴즈
+# ✅ 퀴즈 종료
+if st.session_state.문제번호 >= len(quiz_data):
+    st.success(f"🎓 퀴즈 완료! {len(quiz_data)}문제 중 {st.session_state.점수}문제 정답 👏")
+    비율 = st.session_state.점수 / len(quiz_data)
+    st.progress(int(비율 * 100))
+    st.write(f"정답률: {비율*100:.1f}%")
 
-# 문제 완료 처리
-if st.session_state.문제번호 >= len(퀴즈):
-    st.success(f"🎓 퀴즈 완료! {len(퀴즈)}문제 중 {st.session_state.점수}문제 정답 👏")
-    # 오답노트 등은 이전 코드 그대로 유지
+    if 비율 == 1.0:
+        st.balloons()
+        st.success("완벽합니다! 훌륭한 응급처치 지식 보유자!")
+    elif 비율 >= 0.7:
+        st.info("좋아요! 하지만 몇 가지 복습이 필요해요.")
+    else:
+        st.warning("기초부터 다시 복습해보는 게 좋겠어요!")
+
+    if st.session_state.오답노트:
+        st.subheader("📒 오답노트")
+        for 오답 in st.session_state.오답노트:
+            st.markdown(f"- **상황:** {오답['상황']}")
+            st.markdown(f"  - ❌ 당신의 답: {오답['선택']}")
+            st.markdown(f"  - ✅ 정답: {오답['정답']}")
+            st.markdown(f"  - 💡 해설: {오답['해설']}")
+
+    if st.button("🔁 다시 시작하기"):
+        st.session_state.문제번호 = 0
+        st.session_state.점수 = 0
+        st.session_state.정답상태 = None
+        st.session_state.오답노트 = []
+        st.session_state.문제순서 = random.sample(range(len(quiz_data)), len(quiz_data))
+        st.session_state.시작시간 = time.time()
+        st.rerun()
     st.stop()
 
-문제 = 퀴즈[st.session_state.문제번호]
+# 🎯 문제 출제
+문제인덱스 = st.session_state.문제순서[st.session_state.문제번호]
+문제 = quiz_data[문제인덱스]
+
 st.title("🆘 응급처치 상황 퀴즈")
-st.subheader(f"문제 {st.session_state.문제번호 + 1} / {len(퀴즈)}")
-st.markdown(f"**📂 카테고리: `{문제['카테고리']}`**")
+st.subheader(f"문제 {st.session_state.문제번호 + 1} / {len(quiz_data)}")
+st.write(f"**카테고리:** _{문제['카테고리']}_")
 st.write(f"**상황:** {문제['상황']}")
 
-# 시간 제한 15초
+# ⏱️ 타이머
 남은시간 = 15 - int(time.time() - st.session_state.시작시간)
-if 남은시간 > 0:
-    st.info(f"⏱️ 남은 시간: {남은시간}초")
-else:
+st.info(f"⏱️ 남은 시간: {남은시간}초")
+if 남은시간 <= 0:
     st.error("⏰ 시간 초과! 오답으로 처리됩니다.")
-    st.image(오답_GIF, use_column_width=True)
+    st.image(random.choice(오답_GIF_목록), use_column_width=True)
     st.session_state.오답노트.append({
         "상황": 문제["상황"],
         "선택": "시간 초과",
@@ -243,27 +285,34 @@ else:
 
 선택 = st.radio("당신의 선택은?", 문제["보기"], key=st.session_state.문제번호)
 
+# 🔘 정답 제출
 if st.button("정답 제출"):
     if time.time() - st.session_state.시작시간 > 15:
         st.error("⏰ 제출이 늦었습니다! 오답으로 처리됩니다.")
-        st.image(오답_GIF, use_column_width=True)
+        st.image(random.choice(오답_GIF_목록), use_column_width=True)
         st.session_state.오답노트.append({
             "상황": 문제["상황"],
             "선택": "지각 제출",
             "정답": 문제["정답"],
             "해설": 문제["해설"]
         })
-    elif 선택 == 문제["정답"]:
+        st.session_state.문제번호 += 1
+        st.session_state.정답상태 = None
+        st.session_state.시작시간 = time.time()
+        st.rerun()
+
+    if 선택 == 문제["정답"]:
         st.success(f"정답입니다! ✅ {random.choice(정답_메시지)}")
-        st.image(정답_GIF, use_column_width=True)
+        st.image(random.choice(정답_GIF_목록), use_column_width=True)
         st.session_state.점수 += 1
         st.session_state.정답상태 = "정답"
     else:
         st.error(random.choice(오답_메시지))
-        st.image(오답_GIF, use_column_width=True)
+        st.image(random.choice(오답_GIF_목록), use_column_width=True)
         st.info(f"💡 해설: {문제['해설']}")
         st.session_state.정답상태 = "오답"
 
+# ➡ 다음 문제
 if st.session_state.정답상태 == "정답":
     st.info(f"💡 해설: {문제['해설']}")
     if st.button("➡ 다음 문제로"):
@@ -272,6 +321,7 @@ if st.session_state.정답상태 == "정답":
         st.session_state.시작시간 = time.time()
         st.rerun()
 
+# ❌ 오답 다음 문제로
 if st.session_state.정답상태 == "오답" and st.button("❌ 포기하고 다음 문제로"):
     st.session_state.오답노트.append({
         "상황": 문제["상황"],
