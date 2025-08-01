@@ -271,7 +271,7 @@ st.write(f"**상황:** {문제['상황']}")
 st.info(f"⏱️ 남은 시간: {남은시간}초")
 if 남은시간 <= 0:
     st.error("⏰ 시간 초과! 오답으로 처리됩니다.")
-    st.image(random.choice(오답_GIF_목록), use_column_width=True)
+    st.image(random.choice(오답_GIF_목록), use_container_width=True)
     st.session_state.오답노트.append({
         "상황": 문제["상황"],
         "선택": "시간 초과",
@@ -289,7 +289,7 @@ if 남은시간 <= 0:
 if st.button("정답 제출"):
     if time.time() - st.session_state.시작시간 > 15:
         st.error("⏰ 제출이 늦었습니다! 오답으로 처리됩니다.")
-        st.image(random.choice(오답_GIF_목록), use_column_width=True)
+        st.image(random.choice(오답_GIF_목록), use_container_width=True)
         st.session_state.오답노트.append({
             "상황": 문제["상황"],
             "선택": "지각 제출",
@@ -303,12 +303,12 @@ if st.button("정답 제출"):
 
     if 선택 == 문제["정답"]:
         st.success(f"정답입니다! ✅ {random.choice(정답_메시지)}")
-        st.image(random.choice(정답_GIF_목록), use_column_width=True)
+        st.image(random.choice(정답_GIF_목록), use_container_width=True)
         st.session_state.점수 += 1
         st.session_state.정답상태 = "정답"
     else:
         st.error(random.choice(오답_메시지))
-        st.image(random.choice(오답_GIF_목록), use_column_width=True)
+        st.image(random.choice(오답_GIF_목록), use_container_width=True)
         st.info(f"💡 해설: {문제['해설']}")
         st.session_state.정답상태 = "오답"
 
